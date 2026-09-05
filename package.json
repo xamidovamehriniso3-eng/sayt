@@ -1,0 +1,26 @@
+{
+  "name": "backend-portfolio-site",
+  "version": "1.0.0",
+  "description": "Backend developer portfolio with frontend + Express backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "node",
+    "express",
+    "backend",
+    "frontend"
+  ],
+  "author": "[Mehriniso]",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
