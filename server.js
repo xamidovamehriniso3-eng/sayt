@@ -16,7 +16,7 @@ const profile = {
   role: 'Backend Dasturchiman',
   tagline: 'Node.js, Express.js, MongoDB va Telegram Botlar yaratish bo\'yicha mutaxassis.',
   email: 'hello@yourname.dev',
-  github: 'https://github.com/yourname',
+  github: 'https://github.com/xamidovamehriniso3-eng',
   linkedin: 'https://www.linkedin.com/in/yourname',
   telegram: 'https://t.me/yourname',
   skills: {
