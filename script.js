@@ -124,11 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('projectsGrid');
     if (!grid) return;
 
-    // show loading placeholder
+    // show loading placeholder (don't remove static featured cards yet — keep fallback until fetch succeeds)
     const loading = document.createElement('div');
     loading.className = 'col-span-full text-center text-slate-400';
     loading.textContent = 'Loyihalar yuklanmoqda...';
-    if (featuredGrid) featuredGrid.innerHTML = '';
     grid.innerHTML = '';
     grid.appendChild(loading);
 
@@ -275,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const newBlocks = document.querySelectorAll('.fade-up');
       newBlocks.forEach((b) => observer.observe(b));
     } catch (err) {
-      if (featuredGrid) featuredGrid.innerHTML = '';
+      // keep existing featured (fallback) intact if fetch fails
       grid.innerHTML = '<p class="col-span-full text-center text-red-400">Loyihalar yuklanmadi — keyinroq urinib ko‘ring.</p>';
       console.error('Error loading repos', err);
     }
