@@ -281,6 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Run fetch with the user's GitHub username
-  fetchAndRenderRepos();
+  // Run fetch with the user's GitHub username only when served over HTTP(S)
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    fetchAndRenderRepos();
+  } else {
+    // Running from file:// — keep static projects defined in HTML so they remain visible
+    console.info('Skipping GitHub API fetch while on file:// to preserve static projects.');
+  }
 });
