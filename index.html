@@ -70,6 +70,113 @@
         opacity: 1;
         transform: translateY(0);
       }
+
+      /* Decorative animated blob for a unique hero look */
+      .blob {
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        filter: blur(56px);
+        opacity: 0.38;
+        position: absolute;
+        mix-blend-mode: screen;
+        animation: blob-move 14s infinite linear;
+        pointer-events: none;
+      }
+
+      @keyframes blob-move {
+        0% { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+        40% { transform: translate3d(36px,-30px,0) rotate(140deg) scale(1.06); }
+        70% { transform: translate3d(-22px,18px,0) rotate(260deg) scale(0.98); }
+        100% { transform: translate3d(0,0,0) rotate(360deg) scale(1); }
+      }
+
+      /* Site-wide design tokens and component tweaks */
+      :root {
+        --accent-start: #10b981; /* green */
+        --accent-end: #fb923c;   /* orange */
+        --accent-600: #16a34a;
+        --muted: #94a3b8;
+        --card-bg: rgba(15,23,42,0.64);
+        --glass: rgba(255,255,255,0.04);
+      }
+
+      /* Faster, snappier transitions */
+      * { transition: background-color .16s ease, color .14s ease, transform .18s cubic-bezier(.2,.9,.2,1); }
+
+      /* Buttons */
+      .btn-primary {
+        background: linear-gradient(90deg,var(--accent-start) 0%, var(--accent-end) 100%);
+        color: #071422;
+        padding: .62rem 1rem;
+        border-radius: 9999px;
+        box-shadow: 0 10px 34px rgba(16,185,129,0.12);
+        border: 1px solid rgba(255,255,255,0.04);
+        display: inline-flex; align-items: center; gap: .5rem;
+      }
+      .btn-primary:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 18px 44px rgba(251,146,60,0.16); }
+
+      /* Cards: subtle gradient border using border-image */
+      .rounded-3xl, .rounded-2xl {
+        border: 1px solid transparent;
+        border-image: linear-gradient(90deg,var(--accent-start),var(--accent-end)) 1;
+        transition: box-shadow .18s ease, transform .18s ease, border-image .18s ease;
+      }
+      .rounded-3xl:hover, .rounded-2xl:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(2,8,23,0.6); }
+
+      /* Nav link underline animation */
+      nav a { position: relative; overflow: visible; }
+      nav a::after {
+        content: '';
+        position: absolute;
+        left: 0; bottom: -6px;
+        height: 2px; width: 0;
+        background: linear-gradient(90deg,var(--accent-start), var(--accent-end));
+        transition: width .22s ease;
+        border-radius: 2px;
+      }
+      nav a:hover::after { width: 100%; }
+
+      /* Footer links subtle hover */
+      footer a { transition: color .14s ease; }
+      footer a:hover { color: var(--accent-600); transform: translateY(-2px); }
+
+      /* Slight glass lift for glass panels */
+      .glass { border: 1px solid rgba(255,255,255,0.03); }
+      .glass:hover { transform: translateY(-6px); box-shadow: 0 22px 66px rgba(2,8,23,0.62); }
+
+      /* Form focus styles */
+      input:focus, textarea:focus {
+        border-color: var(--accent-end);
+        box-shadow: 0 8px 40px rgba(124,58,237,0.12);
+        outline: none;
+      }
+
+      /* Blob tweaks: faster and slightly stronger */
+      .blob {
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        filter: blur(78px);
+        opacity: 0.48;
+        position: absolute;
+        mix-blend-mode: screen;
+        animation: blob-move 7s infinite linear;
+        pointer-events: none;
+        background: linear-gradient(135deg,var(--accent-start),var(--accent-end));
+      }
+
+      .blob-2 {
+        width: 320px;
+        height: 320px;
+        filter: blur(52px);
+        opacity: 0.34;
+        animation: blob-move 11s infinite linear reverse;
+        background: linear-gradient(135deg,var(--accent-end),var(--accent-start));
+      }
+
+      /* Fade-up reveal helper (JS adds 'visible') — quicker */
+      .fade-up { will-change: transform, opacity; transition: opacity .42s ease, transform .42s ease; }
     </style>
   </head>
   <body class="text-slate-100 antialiased">
@@ -123,7 +230,9 @@
     </header>
 
     <main id="home" class="pt-28">
-      <section class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
+      <section class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16 relative overflow-hidden">
+        <div class="blob left-[-220px] top-[-120px] -z-10"></div>
+        <div class="blob blob-2 right-[-160px] bottom-[-140px] opacity-30 -z-10"></div>
         <div class="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <div class="fade-up">
             <div class="mb-6 inline-flex items-center rounded-full border border-brand-500/30 bg-brand-500/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-brand-200">
@@ -209,71 +318,72 @@
         <div id="featured" class="mb-10 fade-up">
           <p class="text-sm font-semibold uppercase tracking-[0.22em] text-brand-300">Featured</p>
           <h3 class="mt-2 text-2xl font-bold text-white">Eng yaxshi loyihalar</h3>
-          <div id="featuredGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6"></div>
+          <div id="featuredGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6">
+            <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/80 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
+              <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🌐</div>
+              <h3 class="text-xl font-semibold text-white">Sayt — Portfolio / Demo</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-300">
+                Shaxsiy portfolio saytim — dizayn, responsiv sahifalar va loyiha taqdimotlari.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">HTML</span>
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">CSS</span>
+              </div>
+              <div class="mt-6 flex gap-3">
+                <a href="https://github.com/xamidovamehriniso3-eng/sayt" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
+                <a href="/" target="_blank" rel="noreferrer" class="text-sm font-semibold text-slate-200 hover:text-white">Live Demo</a>
+              </div>
+            </article>
+
+            <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/80 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
+              <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🤖</div>
+              <h3 class="text-xl font-semibold text-white">Telegram-Shop-Bot</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-300">
+                Telegram orqali do'kon funksiyalari: buyurtma qabul qilish, mahsulotlar va admin panel integratsiyasi.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Node.js</span>
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Telegraf</span>
+              </div>
+              <div class="mt-6 flex gap-3">
+                <a href="https://github.com/xamidovamehriniso3-eng/Telegram-Shop-Bot" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
+              </div>
+            </article>
+
+            <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/80 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
+              <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">📊</div>
+              <h3 class="text-xl font-semibold text-white">Ads-view-counter</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-300">
+                Reklama ko'rishlarini hisoblovchi kichik interaktiv sayt va statistik panel.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">HTML</span>
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">JavaScript</span>
+              </div>
+              <div class="mt-6 flex gap-3">
+                <a href="https://github.com/xamidovamehriniso3-eng/Ads-view-counter" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
+                <a href="https://xamidovamehriniso3-eng.github.io/Ads-view-counter" target="_blank" rel="noreferrer" class="text-sm font-semibold text-slate-200 hover:text-white">Live Demo</a>
+              </div>
+            </article>
+
+            <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/80 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
+              <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🧩</div>
+              <h3 class="text-xl font-semibold text-white">telegram-bot</h3>
+              <p class="mt-3 text-sm leading-6 text-slate-300">
+                Turli funksiyalarni bajaruvchi Telegram bot — foydalanuvchi bilan interaktivlik va admin buyruqlari.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">JavaScript</span>
+                <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Node.js</span>
+              </div>
+              <div class="mt-6 flex gap-3">
+                <a href="https://github.com/xamidovamehriniso3-eng/telegram-bot" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
+              </div>
+            </article>
+          </div>
         </div>
 
         <div id="projectsGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
-            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🌐</div>
-            <h3 class="text-xl font-semibold text-white">Sayt — Portfolio / Demo</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-300">
-              Shaxsiy portfolio saytim — dizayn, responsiv sahifalar va loyiha taqdimotlari.
-            </p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">HTML</span>
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">CSS</span>
-            </div>
-            <div class="mt-6 flex gap-3">
-              <a href="https://github.com/xamidovamehriniso3-eng/sayt" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
-              <a href="/" target="_blank" rel="noreferrer" class="text-sm font-semibold text-slate-200 hover:text-white">Live Demo</a>
-            </div>
-          </article>
-
-          <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
-            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🤖</div>
-            <h3 class="text-xl font-semibold text-white">Telegram-Shop-Bot</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-300">
-              Telegram orqali do'kon funksiyalari: buyurtma qabul qilish, mahsulotlar va admin panel integratsiyasi.
-            </p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Node.js</span>
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Telegraf</span>
-            </div>
-            <div class="mt-6 flex gap-3">
-              <a href="https://github.com/xamidovamehriniso3-eng/Telegram-Shop-Bot" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
-            </div>
-          </article>
-
-          <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
-            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">📊</div>
-            <h3 class="text-xl font-semibold text-white">Ads-view-counter</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-300">
-              Reklama ko'rishlarini hisoblovchi kichik interaktiv sayt va statistik panel.
-            </p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">HTML</span>
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">JavaScript</span>
-            </div>
-            <div class="mt-6 flex gap-3">
-              <a href="https://github.com/xamidovamehriniso3-eng/Ads-view-counter" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
-              <a href="https://xamidovamehriniso3-eng.github.io/Ads-view-counter" target="_blank" rel="noreferrer" class="text-sm font-semibold text-slate-200 hover:text-white">Live Demo</a>
-            </div>
-          </article>
-
-          <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
-            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🧩</div>
-            <h3 class="text-xl font-semibold text-white">telegram-bot</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-300">
-              Turli funksiyalarni bajaruvchi Telegram bot — foydalanuvchi bilan interaktivlik va admin buyruqlari.
-            </p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">JavaScript</span>
-              <span class="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-200">Node.js</span>
-            </div>
-            <div class="mt-6 flex gap-3">
-              <a href="https://github.com/xamidovamehriniso3-eng/telegram-bot" target="_blank" rel="noreferrer" class="text-sm font-semibold text-brand-300 hover:text-brand-200">GitHub kodi</a>
-            </div>
-          </article>
 
           <article class="fade-up group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:-translate-y-1 hover:border-brand-400/50 hover:shadow-xl hover:shadow-brand-500/10">
             <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-xl text-brand-300">🧾</div>
@@ -342,7 +452,6 @@
               <h3 class="text-lg font-semibold text-white">Frameworks & Libs</h3>
               <div class="mt-5 flex flex-wrap gap-2">
                 <span class="rounded-full bg-slate-800 px-3 py-2 text-sm text-slate-100">Express.js</span>
-                <span class="rounded-full bg-slate-800 px-3 py-2 text-sm text-slate-100">Telegraf.js</span>
                 <span class="rounded-full bg-slate-800 px-3 py-2 text-sm text-slate-100">Node-telegram-bot-api</span>
               </div>
             </div>
@@ -438,6 +547,23 @@
                   <p class="font-medium text-white">@mehriniso</p>
                 </div>
               </a>
+
+              <a href="https://www.google.com/maps/search/?api=1&query=Termiz%2C%20Surxondaryo%2C%20Uzbekistan" target="_blank" rel="noreferrer" class="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 transition transform hover:translate-x-2 hover:border-emerald-500/60 hover:bg-emerald-500/10 cursor-pointer">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300">📍</div>
+                <div>
+                  <p class="text-sm text-slate-400">Manzil</p>
+                  <p class="font-medium text-white">O'zbekiston, Surxondaryo, Termiz</p>
+                </div>
+              </a>
+
+              <div class="mt-4 rounded-2xl overflow-hidden border border-slate-800">
+                <iframe
+                  src="https://www.google.com/maps?q=Termiz%2C%20Surxondaryo%2C%20Uzbekistan&output=embed"
+                  class="w-full h-48"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
 
               <div id="telegramStatus" class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
                 Telegram bot: tekshirilmoqda...
